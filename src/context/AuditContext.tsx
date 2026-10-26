@@ -107,7 +107,13 @@ export const AuditProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [activeView, setActiveView] = useState<string>('dashboard');
   const [selectedAuditId, setSelectedAuditId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    try {
+      const saved = localStorage.getItem('auditpulse_theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch {}
+    return 'light';
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Sync data with backend API
@@ -178,9 +184,14 @@ export const AuditProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
     }
+    try {
+      localStorage.setItem('auditpulse_theme', theme);
+    } catch {}
   }, [theme]);
 
   const toggleTheme = () => {

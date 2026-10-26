@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAudit } from '../../context/AuditContext';
 import {
   ShieldCheck,
@@ -12,6 +12,7 @@ import {
   LogOut,
   Users,
   ExternalLink,
+  X,
 } from 'lucide-react';
 import type { Role } from '../../types/audit';
 
@@ -34,6 +35,30 @@ export const Navbar: React.FC = () => {
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const notificationsRef = useRef<HTMLDivElement>(null);
+  const roleDropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns automatically when clicking anywhere outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+      if (roleDropdownRef.current && !roleDropdownRef.current.contains(event.target as Node)) {
+        setShowRoleDropdown(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const roles: Role[] = ['Admin', 'Audit Manager', 'Auditor', 'Contributor', 'Viewer'];
   const isAdmin = currentUser.role === 'Admin' || currentUser.name.toLowerCase() === 'ankit';
@@ -88,7 +113,7 @@ export const Navbar: React.FC = () => {
       {/* Actions & Role Switcher */}
       <div className="flex items-center space-x-3">
         {/* Role Switcher Button */}
-        <div className="relative">
+        <div className="relative" ref={roleDropdownRef}>
           <button
             onClick={() => setShowRoleDropdown(!showRoleDropdown)}
             className="flex items-center space-x-2 rounded-xl border border-[#D2DCE4] bg-[#E7EBEE]/90 px-3.5 py-2 text-xs font-semibold text-[#2D3139] transition-colors hover:bg-[#D2DCE4]/60 cursor-pointer shadow-xs"
@@ -128,7 +153,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Notifications */}
-        <div className="relative">
+        <div className="relative" ref={notificationsRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative rounded-xl border border-[#E5D6CE] bg-white p-2.5 text-[#6C737E] hover:text-[#2D3139] transition-colors shadow-xs cursor-pointer"
@@ -139,10 +164,19 @@ export const Navbar: React.FC = () => {
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-84 rounded-2xl border border-[#E5D6CE] bg-white p-4 shadow-2xl z-50">
+            <div className="absolute right-0 mt-2 w-84 rounded-2xl border border-[#E5D6CE] bg-white p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100">
               <div className="flex items-center justify-between pb-3 border-b border-[#E7EBEE]">
-                <span className="text-sm font-bold text-[#2D3139]">System Feed & Logs</span>
-                <span className="text-xs text-[#8C7567] font-bold">Real-Time</span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm font-bold text-[#2D3139]">System Feed & Logs</span>
+                  <span className="text-xs text-[#8C7567] font-bold">Real-Time</span>
+                </div>
+                <button
+                  onClick={() => setShowNotifications(false)}
+                  className="rounded-lg p-1 text-[#6C737E] hover:text-[#2D3139] hover:bg-[#E7EBEE] transition-colors cursor-pointer"
+                  title="Close Notifications"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
               <div className="mt-3 max-h-64 overflow-y-auto space-y-2.5">
                 {activities.slice(0, 5).map((act) => (
@@ -178,13 +212,13 @@ export const Navbar: React.FC = () => {
         <button
           onClick={toggleTheme}
           className="rounded-xl border border-[#E5D6CE] bg-white p-2.5 text-[#6C737E] hover:text-[#2D3139] transition-colors shadow-xs cursor-pointer"
-          title="Toggle Theme"
+          title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
         >
-          {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-500" /> : <Moon className="h-4 w-4 text-[#6C737E]" />}
+          {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-[#6C737E]" />}
         </button>
 
         {/* User Profile Info & Dropdown */}
-        <div className="relative pl-2 border-l border-[#E5D6CE]">
+        <div className="relative pl-2 border-l border-[#E5D6CE]" ref={userDropdownRef}>
           <button
             onClick={() => setShowUserDropdown(!showUserDropdown)}
             className="flex items-center space-x-2.5 rounded-xl border border-transparent p-1.5 hover:border-[#E5D6CE] hover:bg-white transition-all cursor-pointer text-left"

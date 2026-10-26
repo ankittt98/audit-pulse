@@ -18,6 +18,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   body {
@@ -27,11 +28,134 @@
     font-size: 0.95rem;
     line-height: 1.55;
     letter-spacing: -0.01em;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   button, input, select, textarea {
     font-family: inherit;
   }
+}
+
+/* ======================================================== */
+/* 🌙 DARK MODE STYLING ENGINE (Instant site-wide theme)   */
+/* ======================================================== */
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body,
+html.dark .min-h-screen {
+  background-color: #12161F !important;
+  color: #F1F5F9 !important;
+}
+
+/* Header & Sidebar */
+html.dark header {
+  background-color: rgba(23, 29, 39, 0.95) !important;
+  border-color: #2A3446 !important;
+}
+
+html.dark aside {
+  background-color: rgba(23, 29, 39, 0.90) !important;
+  border-color: #2A3446 !important;
+}
+
+/* Cards & Surfaces */
+html.dark .bg-white {
+  background-color: #1E2532 !important;
+  color: #F1F5F9 !important;
+  border-color: #2E384D !important;
+}
+
+html.dark .bg-\[\#F8F2EF\],
+html.dark .bg-\[\#F8F2EF\]\/40,
+html.dark .bg-\[\#F8F2EF\]\/50,
+html.dark .bg-\[\#F8F2EF\]\/60,
+html.dark .bg-\[\#F8F2EF\]\/80,
+html.dark .bg-\[\#F8F2EF\]\/90,
+html.dark .bg-\[\#F8F2EF\]\/95 {
+  background-color: #161C26 !important;
+  border-color: #2A3446 !important;
+}
+
+html.dark .bg-\[\#E7EBEE\],
+html.dark .bg-\[\#E7EBEE\]\/60,
+html.dark .bg-\[\#E7EBEE\]\/80,
+html.dark .bg-\[\#E7EBEE\]\/90 {
+  background-color: #263041 !important;
+  border-color: #37445C !important;
+  color: #E2E8F0 !important;
+}
+
+html.dark .bg-\[\#D2DCE4\],
+html.dark .bg-\[\#D2DCE4\]\/40,
+html.dark .bg-\[\#D2DCE4\]\/50,
+html.dark .bg-\[\#D2DCE4\]\/60 {
+  background-color: #2B374A !important;
+  border-color: #3D4D68 !important;
+  color: #E2E8F0 !important;
+}
+
+html.dark .bg-\[\#E5D6CE\],
+html.dark .bg-\[\#E5D6CE\]\/40,
+html.dark .bg-\[\#E5D6CE\]\/50,
+html.dark .bg-\[\#E5D6CE\]\/60 {
+  background-color: #38302B !important;
+  border-color: #55443B !important;
+  color: #F3EAE5 !important;
+}
+
+/* Borders */
+html.dark .border-\[\#E5D6CE\],
+html.dark .border-\[\#E7EBEE\],
+html.dark .border-\[\#D2DCE4\],
+html.dark .border-\[\#E2DDD9\] {
+  border-color: #2A3446 !important;
+}
+
+/* Typography in Dark Mode */
+html.dark .text-\[\#2D3139\] {
+  color: #F8FAFC !important;
+}
+
+html.dark .text-\[\#5D6470\],
+html.dark .text-\[\#6C737E\] {
+  color: #94A3B8 !important;
+}
+
+html.dark .text-\[\#8C7567\] {
+  color: #DEC3B3 !important;
+}
+
+/* Form Inputs & Selects in Dark Mode */
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #161C26 !important;
+  color: #F8FAFC !important;
+  border-color: #37445C !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+/* Modals backdrop */
+html.dark .bg-\[\#2D3139\]\/40,
+html.dark .bg-\[\#2D3139\]\/60 {
+  background-color: rgba(5, 8, 14, 0.75) !important;
+}
+
+/* Shadows in Dark Mode */
+html.dark .shadow-xs,
+html.dark .shadow-sm,
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* Minimal Custom Scrollbar */
@@ -44,9 +168,17 @@
   background: #F8F2EF;
 }
 
+html.dark ::-webkit-scrollbar-track {
+  background: #12161F;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #D2DCE4;
   border-radius: 9999px;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #2E384D;
 }
 
 ::-webkit-scrollbar-thumb:hover {
